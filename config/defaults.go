@@ -1,8 +1,12 @@
 // B"H
+/*
+Package config provides defaults config json and config structs
+*/
 package config
 
 var defaultConfig []byte
 
+// init Initialize default config json
 func init() {
 
 	defaultConfig = []byte(`{
@@ -13,6 +17,7 @@ func init() {
 	}`)
 }
 
+// GetDefaultConfig return default config as byte array
 func GetDefaultConfig() []byte {
 	return defaultConfig
 }

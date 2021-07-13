@@ -1,1 +1,1 @@
-Tool to repacke and publish vscode extensions for use with vscode-private-extension-manager
+Tool to repacke and publish vscode extensions for use with [vscode-private-extension-manager](vscode-private-extension-manager)
