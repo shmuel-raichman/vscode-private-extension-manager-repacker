@@ -8,6 +8,8 @@ import (
 	"crypto/tls"
 	"fmt"
 	"io"
+	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -99,4 +101,17 @@ func DownloadFile(filepath string, url string, quiet bool) error {
 	}
 
 	return nil
+}
+
+func GetFileContent(url string) []byte {
+	resp, err := http.Get(url)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	//We Read the response body on the line below.
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	return body
 }
