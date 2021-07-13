@@ -1,3 +1,4 @@
+// B"H
 package utils
 
 import (
