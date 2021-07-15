@@ -97,3 +97,11 @@ func GetExtentionsIDsConfig() []string {
 func GetQueryUrlConfig() string {
 	return configData.QueryUrl
 }
+
+func GetRegistryConfig() string {
+	return configData.RegistryUrl
+}
+
+func GetConfig() config.Config {
+	return configData
+}

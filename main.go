@@ -33,7 +33,7 @@ func main() {
 			"publish",
 			currentExtentionDir,
 			"--registry",
-			"http://localhost:4873/",
+			utils.GetRegistryConfig(),
 		}
 
 		utils.ExecuteCommand("npm", command)
