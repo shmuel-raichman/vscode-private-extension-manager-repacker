@@ -1,7 +1,11 @@
 // B"H
+/*
+Package utils NEEDS MORE COMMENTS
+*/
 package utils
 
 // https://blog.kowalczyk.info/article/wOYk/advanced-command-execution-in-go-with-osexec.html
+// I need to read and maybe refactor this function
 import (
 	"bytes"
 	"io"
@@ -11,6 +15,8 @@ import (
 	"sync"
 )
 
+// https://blog.kowalczyk.info/article/wOYk/advanced-command-execution-in-go-with-osexec.html
+// I need the above to read and maybe refactor this function
 func ExecuteCommand(executable string, command []string) {
 
 	cmd := exec.Command(executable, command...)

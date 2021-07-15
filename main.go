@@ -1,4 +1,7 @@
 // B"H
+/*
+Package main
+*/
 package main
 
 import (

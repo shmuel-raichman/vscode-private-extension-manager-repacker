@@ -1,5 +1,7 @@
 // B"H
-
+/*
+Package utils needs more comments
+*/
 package utils
 
 // credit https://blog.risingstack.com/golang-tutorial-for-nodejs-developers-getting-started/#nethttp

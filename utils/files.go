@@ -1,4 +1,7 @@
 // B"H
+/*
+Package utils NEEDS MORE COMMENTS
+*/
 package utils
 
 import (

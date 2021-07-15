@@ -1,6 +1,7 @@
 // B"H
 /*
-	https://golangcode.com/download-a-file-with-progress/
+/*
+Package utils
 */
 package utils
 
@@ -20,6 +21,9 @@ import (
 
 var quietDownload bool
 
+// ---
+// DownloadFile helpers from same source
+// ---
 // WriteCounter counts the number of bytes written to it. It implements to the io.Writer interface
 // and we can pass this into io.TeeReader() which will report progress on each write cycle.
 type WriteCounter struct {
@@ -44,6 +48,15 @@ func (wc WriteCounter) PrintProgress() {
 	}
 }
 
+// ---
+// End of helpers
+// ---
+
+/*
+DownloadFile
+https://golangcode.com/download-a-file-with-progress/
+This code is copy paste with quiet flag that I added from the above blog post and it working great.
+*/
 // DownloadFile will download a url to a local file. It's efficient because it will
 // write as it downloads and not load the whole file into memory. We pass an io.TeeReader
 // into Copy() to report progress on the download.
@@ -103,6 +116,8 @@ func DownloadFile(filepath string, url string, quiet bool) error {
 	return nil
 }
 
+// GetFileContent return response body (without closing body no reason for it)
+// Actually I see now the this is just get request function that needs a little touch up
 func GetFileContent(url string) []byte {
 	resp, err := http.Get(url)
 	if err != nil {

@@ -1,2 +1,4 @@
 ext/
 *.visx
+repacker*
+vscode-ext*

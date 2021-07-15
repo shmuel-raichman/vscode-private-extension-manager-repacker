@@ -18,12 +18,19 @@ import (
 )
 
 // GetExtentionMeta calls vscode marketplace with extention id and return extention Manifest as pre configured struct
+// Each faild step will return empty "*structs.ExtentionResaults" and err
 func GetExtentionMeta(url string, method string, extensionId string) (*structs.ExtentionResaults, error) {
 	// url := "https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery"
 	// method := "POST"
 
 	// extId := "ms-vscode.PowerShell"
 
+	/*
+		Construct request objects to be marshel into json request body
+		Hard coded values from sniffing vscode request
+		The objects here are nested final object type "ExtentionRequest"
+	*/
+	// The only modified value here is "extensionId"
 	criterionId := structs.Criterion{
 		FilterType: 7,
 		Value:      extensionId,
@@ -42,37 +49,50 @@ func GetExtentionMeta(url string, method string, extensionId string) (*structs.E
 		Flags:   950,
 	}
 
+	// Marshel the request object into json (marshel is object method)
 	payload, err := extentionRequest.Marshal()
 	if err != nil {
 		return &structs.ExtentionResaults{}, err
 	}
 
+	// Create http request
 	client := &http.Client{}
 	req, err := http.NewRequest(method, url, bytes.NewReader(payload))
-
 	if err != nil {
 		return &structs.ExtentionResaults{}, err
 	}
+
+	// Headers from sniffing vscode request (maybe there is more headers to ommit)
 	req.Header.Add("accept", "application/json;api-version=3.0-preview.1")
 	req.Header.Add("accept-language", "en-US")
 	req.Header.Add("content-type", "application/json")
 	// req.Header.Add("x-market-client-id", "VSCode 1.58.0-insider")
 
+	// Do the http request
 	res, err := client.Do(req)
 	if err != nil {
 		return &structs.ExtentionResaults{}, err
 	}
+	// https://tour.golang.org/flowcontrol/12
+	// Not sure need further reading what this line
+	// In general and whats is defer in particular
 	defer res.Body.Close()
 
+	// Convert results.body to byte array
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		return &structs.ExtentionResaults{}, err
 	}
 
+	// Unmarshel json into per defined "ExtentionResaults"
 	extentionResaults, err := structs.UnmarshalExtentionResaults(body)
 	if err != nil {
 		return &structs.ExtentionResaults{}, err
 	}
+	// If all this is cool let's return extention results
+	// Basicly what I need from this struct is
+	// Results[0].Extensions[0].Versions[0].Files which contains Urls for the extention files manifest, readme.md etc.
+	// There is probably a better more error safe way to get it but this works for now.
 	return &extentionResaults, nil
 }
 
