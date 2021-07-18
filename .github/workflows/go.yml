@@ -19,8 +19,10 @@ jobs:
         go-version: 1.16
 
     - name: Build
-      run: go build -o bin/repacker vscode-ext \
-          && env GOOS=windows GOARCH=amd64 go build -o bin/repacker.exe vscode-ext
+      run: go build -o bin/repacker vscode-ext
+        
+    - name: Build-Windows
+      run: env GOOS=windows GOARCH=amd64 go build -o bin/repacker.exe vscode-ext
         
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.2.4
