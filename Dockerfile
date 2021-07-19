@@ -1,8 +1,8 @@
 # B"H
-FROM golang
+FROM golang as builder
 
-WORKDIR /app/golang/icp
-COPY . /app/golang/icp/
+WORKDIR /app/golang/ext
+COPY . /app/golang/ext/
 
 # ARG OS=linux
 # ARG VERSION=unknown
@@ -28,3 +28,7 @@ RUN env GOOS=windows GOARCH=amd64 go build -o bin/$ARTIFACT_FULL_NAME.exe $GO_MO
 # RUN go build -o $ARTIFACT_FULL_NAME -ldflags="-X $GO_MODE_NAME/flags.BuildVersion=$VERSION" $GO_MODE_NAME
 # Windows build
 # RUN env GOOS=windows GOARCH=amd64 go build -o $ARTIFACT_FULL_NAME.exe -ldflags="-X $GO_MODE_NAME/flags.BuildVersion=$VERSION" $GO_MODE_NAME
+
+FROM node:14-buster-slim
+
+COPY --from=builder /app/golang/ext/repacker /app
