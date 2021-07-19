@@ -119,10 +119,29 @@ func DownloadFile(filepath string, url string, quiet bool) error {
 // GetFileContent return response body (without closing body no reason for it)
 // Actually I see now the this is just get request function that needs a little touch up
 func GetFileContent(url string) []byte {
-	resp, err := http.Get(url)
-	if err != nil {
-		log.Fatalln(err)
+
+	// Skip ssl vrification.
+	httpTransport := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
+
+	// Create http request
+	client := &http.Client{Transport: httpTransport}
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Do the http request
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+	// resp, err := http.Get(url)
+	// if err != nil {
+	// 	log.Fatalln(err)
+	// }
 	//We Read the response body on the line below.
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {

@@ -20,15 +20,21 @@ func main() {
 
 	extensionsIDs := utils.GetExtentionsIDsConfig()
 
-	for _, ext := range extensionsIDs {
-		fmt.Println(ext)
-		extentionResaults, err := extentions.GetExtentionMeta(url, method, ext)
+	// For each extention id in config file
+	// Request manifest into struct and downlaod each extention files
+	for _, extentionID := range extensionsIDs {
+		fmt.Println("extentionID: ", extentionID)
+		// Get current extention manifest to ExtentionResaults struct
+		extentionResaults, err := extentions.GetExtentionMeta(url, method, extentionID)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		extentions.DownloadExtentionFiles(baseExtentionsPath, ext, *extentionResaults)
-		currentExtentionDir := filepath.Join(baseExtentionsPath, ext)
+		// Download requierd extention files.
+		extentions.DownloadExtentionFiles(baseExtentionsPath, extentionID, *extentionResaults)
+
+		currentExtentionDir := filepath.Join(baseExtentionsPath, extentionID)
+		// npm publish command parameters
 		command := []string{
 			"publish",
 			currentExtentionDir,
@@ -36,6 +42,7 @@ func main() {
 			utils.GetRegistryConfig(),
 		}
 
+		// Run npm publish command
 		utils.ExecuteCommand("npm", command)
 	}
 }

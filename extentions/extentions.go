@@ -6,6 +6,7 @@ package extentions
 
 import (
 	"bytes"
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -55,8 +56,14 @@ func GetExtentionMeta(url string, method string, extensionId string) (*structs.E
 		return &structs.ExtentionResaults{}, err
 	}
 
+	// Skip ssl vrification.
+	httpTransport := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+
 	// Create http request
-	client := &http.Client{}
+	// client := &http.Client{}
+	client := &http.Client{Transport: httpTransport}
 	req, err := http.NewRequest(method, url, bytes.NewReader(payload))
 	if err != nil {
 		return &structs.ExtentionResaults{}, err
