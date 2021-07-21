@@ -111,7 +111,7 @@ func readConfigs() {
 	}
 
 	defaultConfigPath := filepath.Join(currentWorkingDiractory, "repacker-config.json")
-	homeConfigPath := filepath.Join(homeDirPath, ".vsix-to-fnpm", "config.json")
+	homeConfigPath := filepath.Join(homeDirPath, ".vsix-to-npm", "config.json")
 
 	log.Println("Looking for config file in: ", homeConfigPath)
 	_, err = os.Stat(homeConfigPath)
