@@ -4,6 +4,7 @@ FROM golang as builder
 WORKDIR /app/golang/ext
 COPY . /app/golang/ext/
 
+
 # ARG OS=linux
 # ARG VERSION=unknown
 ARG ARTIFACT_NAME=repacker
@@ -32,11 +33,11 @@ RUN env GOOS=windows GOARCH=amd64 go build -o bin/$ARTIFACT_FULL_NAME.exe $GO_MO
 ENTRYPOINT ["/bin/sh", "-c"]
 CMD ["cat"]
 
-# FROM node:14-buster-slim
+FROM node:10-buster-slim
 
-# WORKDIR /app
+WORKDIR /app
 
-# COPY --from=builder /app/golang/ext/bin/repacker /app/repacker
+COPY --from=builder /app/golang/ext/bin/repacker /app/repacker
 
-# ENTRYPOINT ["/bin/sh", "-c"]
-# CMD ["cat"]
+ENTRYPOINT ["/bin/sh", "-c"]
+CMD ["cat"]
