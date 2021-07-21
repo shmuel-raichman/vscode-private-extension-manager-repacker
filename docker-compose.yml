@@ -5,17 +5,17 @@ services:
         restart: always
         ports:
             - 4873:4873
+        volumes:
+        - /opt/workspace/vsix-to-npm/verdaccio-config.yaml:/verdaccio/conf/config.yaml
     repacker:
         image: smuel770/vscode-extentions-repacker:0.1.2
         depends_on:
             - repo
         restart: always
-        entrypoint: "/bin/sh"
-        command: -c "cat"
         tty: true
         environment:
             HTTP_PROXY: 
             HTTPS_PROXY: 
             NO_PROXY: repo,127.0.0.1,localhost
         volumes:
-            - /opt/workspace/vsix-to-npm/config.json:/root/.vsix-to-npm/config.json
+            - /opt/workspace/vsix-to-npm/repacker-config.json:/root/.vsix-to-npm/config.json
