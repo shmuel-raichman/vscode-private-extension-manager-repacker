@@ -29,11 +29,14 @@ RUN env GOOS=windows GOARCH=amd64 go build -o bin/$ARTIFACT_FULL_NAME.exe $GO_MO
 # Windows build
 # RUN env GOOS=windows GOARCH=amd64 go build -o $ARTIFACT_FULL_NAME.exe -ldflags="-X $GO_MODE_NAME/flags.BuildVersion=$VERSION" $GO_MODE_NAME
 
-FROM node:14-buster-slim
-
-WORKDIR /app
-
-COPY --from=builder /app/golang/ext/bin/repacker /app/repacker
-
 ENTRYPOINT ["/bin/sh", "-c"]
 CMD ["cat"]
+
+# FROM node:14-buster-slim
+
+# WORKDIR /app
+
+# COPY --from=builder /app/golang/ext/bin/repacker /app/repacker
+
+# ENTRYPOINT ["/bin/sh", "-c"]
+# CMD ["cat"]

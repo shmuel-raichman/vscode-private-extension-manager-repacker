@@ -39,3 +39,9 @@ go build -o repacker vscode-ext
 # Build on linux for Windows
 env GOOS=windows GOARCH=amd64 go build -o repacker.exe vscode-ext
 ```
+
+
+Login to verdaccio
+```
+npm adduser --registry http://repo:4873
+```
