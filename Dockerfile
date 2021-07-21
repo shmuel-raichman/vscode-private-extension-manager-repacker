@@ -34,3 +34,6 @@ FROM node:14-buster-slim
 WORKDIR /app
 
 COPY --from=builder /app/golang/ext/bin/repacker /app/repacker
+
+ENTRYPOINT /bin/sh
+CMD ["cat"]
