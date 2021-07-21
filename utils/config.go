@@ -7,6 +7,7 @@ package utils
 // credit https://blog.risingstack.com/golang-tutorial-for-nodejs-developers-getting-started/#nethttp
 
 import (
+	"errors"
 	"path/filepath"
 	"vscode-ext/config"
 
@@ -14,10 +15,10 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/fs"
 	"io/ioutil"
 	"log"
 	"os"
-	"os/exec"
 )
 
 var (
@@ -69,25 +70,71 @@ func readConfigFile(configFilePath string) *bytes.Buffer {
 	return jsonConfigBytesBuffer
 }
 
-func readConfigs() { // config.Config{
+// func readConfigs() { // config.Config{
+// 	homeDirPath, err := os.UserHomeDir()
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+
+// 	defaultConfigPath := filepath.Join(homeDirPath, ".vsix-to-npm", "config.json")
+// 	var configFilePath string = defaultConfigPath
+// 	// var config config.Config
+// 	_, err = exec.LookPath(configFilePath)
+// 	// If no error then file exist else download file.
+// 	if err == nil {
+// 		log.Println("Read config from file.")
+// 		configData = ReadConfigJson(readConfigFile(configFilePath))
+// 	} else {
+// 		log.Println("Use default config.")
+// 		configData = ReadConfigJson(useDefaultConfig())
+// 	}
+// 	// return config
+// }
+
+func readConfigs() {
+
+	var configFilePath string
+	var configFromFile bool
+
+	// Get user home dir
 	homeDirPath, err := os.UserHomeDir()
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		homeDirPath = ""
 	}
 
-	defaultConfigPath := filepath.Join(homeDirPath, ".vsix-to-npm", "config.json")
-	var configFilePath string = defaultConfigPath
-	// var config config.Config
-	_, err = exec.LookPath(configFilePath)
-	// If no error then file exist else download file.
-	if err == nil {
-		log.Println("Read config from file.")
+	// Get current working diratory.
+	currentWorkingDiractory, err := os.Getwd()
+	if err != nil {
+		log.Println(err)
+		currentWorkingDiractory = ""
+	}
+
+	defaultConfigPath := filepath.Join(currentWorkingDiractory, "repacker-config.json")
+	homeConfigPath := filepath.Join(homeDirPath, ".vsix-to-fnpm", "config.json")
+
+	log.Println("Looking for config file in: ", homeConfigPath)
+	_, err = os.Stat(homeConfigPath)
+	if !errors.Is(err, fs.ErrNotExist) {
+		configFilePath = homeConfigPath
+		configFromFile = true
+	}
+
+	log.Println("Looking for config file in: ", defaultConfigPath)
+	_, err = os.Stat(defaultConfigPath)
+	if !errors.Is(err, fs.ErrNotExist) {
+		configFilePath = defaultConfigPath
+		configFromFile = true
+	}
+
+	if configFromFile {
+		log.Println("Read config from: ", configFilePath)
 		configData = ReadConfigJson(readConfigFile(configFilePath))
 	} else {
-		log.Println("Use default config.")
+		log.Println("")
+		log.Println("Config file not found, using default config")
 		configData = ReadConfigJson(useDefaultConfig())
 	}
-	// return config
 }
 
 func GetExtentionsIDsConfig() []string {

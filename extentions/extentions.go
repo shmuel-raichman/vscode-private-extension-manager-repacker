@@ -56,9 +56,12 @@ func GetExtentionMeta(url string, method string, extensionId string) (*structs.E
 		return &structs.ExtentionResaults{}, err
 	}
 
+	// TODO add flag
+	var insecureSkipVerify bool = true
 	// Skip ssl vrification.
 	httpTransport := &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: insecureSkipVerify},
+		Proxy:           http.ProxyFromEnvironment,
 	}
 
 	// Create http request

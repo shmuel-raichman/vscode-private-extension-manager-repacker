@@ -67,9 +67,12 @@ func DownloadFile(filepath string, url string, quiet bool) error {
 		quietDownload = true
 	}
 
+	// TODO add flag
+	var insecureSkipVerify bool = true
 	// Skip ssl vrification.
 	httpTransport := &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: insecureSkipVerify},
+		Proxy:           http.ProxyFromEnvironment,
 	}
 	client := &http.Client{Transport: httpTransport}
 
@@ -120,9 +123,12 @@ func DownloadFile(filepath string, url string, quiet bool) error {
 // Actually I see now the this is just get request function that needs a little touch up
 func GetFileContent(url string) []byte {
 
+	// TODO add flag
+	var insecureSkipVerify bool = true
 	// Skip ssl vrification.
 	httpTransport := &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: insecureSkipVerify},
+		Proxy:           http.ProxyFromEnvironment,
 	}
 
 	// Create http request

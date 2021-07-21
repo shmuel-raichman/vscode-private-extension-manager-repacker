@@ -31,4 +31,6 @@ RUN env GOOS=windows GOARCH=amd64 go build -o bin/$ARTIFACT_FULL_NAME.exe $GO_MO
 
 FROM node:14-buster-slim
 
-COPY --from=builder /app/golang/ext/repacker /app
+WORKDIR /app
+
+COPY --from=builder /app/golang/ext/bin/repacker /app/repacker
