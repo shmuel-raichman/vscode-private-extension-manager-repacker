@@ -39,5 +39,5 @@ WORKDIR /app
 
 COPY --from=builder /app/golang/ext/bin/repacker /app/repacker
 
-ENTRYPOINT ["/bin/sh", "-c"]
-CMD ["cat"]
+# ENTRYPOINT ["/bin/sh", "-c"]
+CMD ["/app/repacker"]

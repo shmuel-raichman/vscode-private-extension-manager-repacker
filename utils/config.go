@@ -149,6 +149,10 @@ func GetRegistryConfig() string {
 	return configData.RegistryUrl
 }
 
+func GetDownloadPathConfig() string {
+	return configData.DownloadPath
+}
+
 func GetConfig() config.Config {
 	return configData
 }
