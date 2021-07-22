@@ -8,12 +8,27 @@ services:
         volumes:
         - ./verdaccio-config.yaml:/verdaccio/conf/config.yaml
     repacker:
-        image: smuel770/vscode-extentions-repacker:9
+        image: smuel770/vscode-extentions-repacker:11
+        deploy:
+            replicas: 0
+        tty: true
+        environment:
+            HTTP_PROXY: 
+            HTTPS_PROXY: 
+            NO_PROXY: repo,127.0.0.1,localhost
+        volumes:
+            - ./repacker-config.json:/root/.vsix-to-npm/config.json
+            - $HOME/.npmrc:/root/.npmrc
+    repacker-debug:
+        image: smuel770/vscode-extentions-repacker:11
         depends_on:
             - repo
         deploy:
             replicas: 0
-        restart: never
+        entrypoint: ["/bin/sh", -c]
+        command: ["cat"]
+        # restart: 
+        tty: true
         environment:
             HTTP_PROXY: 
             HTTPS_PROXY: 
