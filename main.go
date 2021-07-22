@@ -7,6 +7,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 	"path/filepath"
 	"vscode-ext/extentions"
 	"vscode-ext/utils"
@@ -14,11 +15,11 @@ import (
 
 func main() {
 
-	url := utils.GetQueryUrlConfig()
+	url := utils.GetConfig().QueryUrl
 	method := "POST"
-	var baseExtentionsPath string = "ext"
+	var baseExtentionsPath string = utils.GetConfig().DownloadPath
 
-	extensionsIDs := utils.GetExtentionsIDsConfig()
+	extensionsIDs := utils.GetConfig().ExtentionsIDs
 
 	// For each extention id in config file
 	// Request manifest into struct and downlaod each extention files
@@ -33,16 +34,31 @@ func main() {
 		// Download requierd extention files.
 		extentions.DownloadExtentionFiles(baseExtentionsPath, extentionID, *extentionResaults)
 
-		currentExtentionDir := filepath.Join(baseExtentionsPath, extentionID)
-		// npm publish command parameters
-		command := []string{
-			"publish",
-			currentExtentionDir,
-			"--registry",
-			utils.GetRegistryConfig(),
+		// Get current working diratory.
+		currentWorkingDiractory, err := os.Getwd()
+		if err != nil {
+			log.Println(err)
 		}
 
-		// Run npm publish command
-		utils.ExecuteCommand("npm", command)
+		currentExtentionDir := filepath.Join(currentWorkingDiractory, baseExtentionsPath, extentionID)
+		// npm publish command parameters
+		npmPublishCommand := []string{
+			"publish",
+			// currentExtentionDir,
+			"--registry",
+			utils.GetConfig().RegistryUrl,
+		}
+
+		npmUnpublishCommand := []string{
+			"unpublish",
+			// currentExtentionDir,
+			"--registry",
+			utils.GetConfig().RegistryUrl,
+			"--force",
+		}
+
+		println(currentExtentionDir)
+		utils.ExecuteCommand("npm", npmUnpublishCommand, currentExtentionDir)
+		utils.ExecuteCommand("npm", npmPublishCommand, currentExtentionDir)
 	}
 }

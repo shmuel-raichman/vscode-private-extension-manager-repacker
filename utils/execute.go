@@ -17,10 +17,12 @@ import (
 
 // https://blog.kowalczyk.info/article/wOYk/advanced-command-execution-in-go-with-osexec.html
 // I need the above to read and maybe refactor this function
-func ExecuteCommand(executable string, command []string) {
+func ExecuteCommand(executable string, command []string, executionPath string) {
 
 	cmd := exec.Command(executable, command...)
-	// cmd.Dir = executionPath
+	cmd.Dir = executionPath
+
+	println(cmd.String())
 
 	var stdoutBuf, stderrBuf bytes.Buffer
 	stdoutIn, _ := cmd.StdoutPipe()
