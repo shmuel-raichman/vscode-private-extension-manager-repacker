@@ -16,7 +16,6 @@ import (
 	"strings"
 
 	external "github.com/dustin/go-humanize"
-	// "org.menora/icp.login/external"
 )
 
 var quietDownload bool
