@@ -46,6 +46,12 @@ Config is requierd since the default it complied with just the the above config.
 ```
 ./repacker
 ```
+With docker-compose:
+```
+# For this to work you need to have $HOME/.npmrc file with auth configured or create one
+# Also add repacker-config.json file to docker-compose dir
+ddocker-compose run repacker
+```
 
 # Building
 ```bash
